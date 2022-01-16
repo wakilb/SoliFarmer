@@ -1,10 +1,13 @@
 import express from "express";
 import bodyParser from "body-parser";
 import { MongoClient, ObjectId } from "mongodb";
+import path from "path";
 
 const port = process.env.PORT || 8000;
 
 const app = express();
+
+app.use(express.static(path.join(__dirname, "/build")));
 app.use(bodyParser.json());
 
 const toDB = async (operations, res) => {
@@ -23,8 +26,6 @@ const toDB = async (operations, res) => {
       .json({ message: "Something went wrong ", error: error.message });
   }
 };
-
-app.listen(port);
 
 //User APIs
 app.get("/api/users", async (req, res) => {
@@ -151,3 +152,8 @@ app.post("/api/farm/update/:id", async (req, res) => {
     res.status(200).json(updatedFarm);
   }, res);
 });
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname + "/build/index.html"));
+});
+
+app.listen(port);
