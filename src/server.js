@@ -79,6 +79,79 @@ app.post("/api/user/update/:id", async (req, res) => {
   }, res);
 });
 
+//Farm APIs
+app.get("/api/farms", async (req, res) => {
+  toDB(async (db) => {
+    const farmsList = await db.collection("farms").find({}).toArray();
+    res.status(200).json(farmsList);
+  });
+});
+app.get("/api/farm/:id", async (req, res) => {
+  const id = req.params.id;
+  toDB(async (db) => {
+    const farm = await db
+      .collection("farms")
+      .findOne({ _id: new ObjectId(id) });
+    res.status(200).json(farm);
+  }, res);
+});
+app.post("/api/farm/create", async (req, res) => {
+  const picture = null;
+  const name = req.body.name;
+  const owners = req.body.owners;
+  const staff = req.body.staff;
+  const visitors = req.body.visitors;
+  const size = req.body.size;
+  const privacy = req.body.privacy;
+  const location = req.body.location;
+  const extraInfo = req.body.extraInfo;
+  const creator = null;
+
+  toDB(async (db) => {
+    const userInfo = await db.collection("farms").insertOne({
+      name: name,
+      owners: owners,
+      staff: staff,
+      visitors: visitors,
+      size: size,
+      privacy: privacy,
+      location: location,
+      extraInfo: extraInfo,
+    });
+    res.status(200).json(req.body);
+  });
+});
+app.post("/api/farm/update/:id", async (req, res) => {
+  const id = req.params.id;
+
+  toDB(async (db) => {
+    await db.collection("farms").updateOne(
+      { _id: new ObjectId(id) },
+      {
+        $set: {
+          picture: null,
+          name: req.body.name,
+          owners: req.body.owners,
+          staff: req.body.staff,
+          visitors: req.body.visitors,
+          size: req.body.size,
+          privacy: req.body.privacy,
+          location: req.body.location,
+          extraInfo: req.body.extraInfo,
+          creator: null,
+        },
+      }
+    );
+  }, res);
+
+  toDB(async (db) => {
+    const updatedFarm = await db
+      .collection("farms")
+      .findOne({ _id: new ObjectId(id) });
+    res.status(200).json(updatedFarm);
+  }, res);
+});
+
 //Just tests
 app.get("/api/user/:name", async (req, res) => {
   const username = req.params.name;
