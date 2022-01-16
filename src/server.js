@@ -151,18 +151,3 @@ app.post("/api/farm/update/:id", async (req, res) => {
     res.status(200).json(updatedFarm);
   }, res);
 });
-
-//Just tests
-app.get("/api/user/:name", async (req, res) => {
-  const username = req.params.name;
-  console.log(username);
-  const client = await MongoClient.connect("mongodb://localhost:27017");
-  const db = client.db("solifarmer");
-
-  const userInfo = await db.collection("users").findOne({ lastname: username });
-  res.status(200).json(userInfo);
-
-  client.close();
-});
-app.get("/hello/:name", (req, res) => res.send(`Hello! ${req.params.name}`));
-app.get("/hello", (req, res) => res.send(`Hello! ${req.body.name}`));
