@@ -12,6 +12,10 @@
 
 A version of the app is hosted on AWS: [link](http://ec2-44-201-80-245.compute-1.amazonaws.com/)
 
+## Source 
+
+if you want to have a look at the code before the build, check [link](https://github.com/wakilb/Solifarmer-source) 
+
 ## Technology used 
 
  - React 
